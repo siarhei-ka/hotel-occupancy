@@ -1,0 +1,66 @@
+openapi: 3.0.3
+info:
+  title: Hotel Occupancy Optimization API
+  description: API for optimizing hotel room allocations and revenue.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+paths:
+  /occupancy:
+    post:
+      summary: Calculate optimal room usage and revenue
+      description: Returns room usage and revenue for Premium and Economy rooms based on guest willingness to pay.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OccupancyRequest'
+      responses:
+        '200':
+          description: Room allocation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OccupancyResponse'
+        '400':
+          description: Invalid input data
+components:
+  schemas:
+    OccupancyRequest:
+      type: object
+      properties:
+        premiumRooms:
+          type: integer
+          example: 7
+        economyRooms:
+          type: integer
+          example: 5
+        potentialGuests:
+          type: array
+          items:
+            type: number
+            format: double
+          example: [23, 45, 155, 374, 22, 99.99, 100, 101, 115, 209]
+      required:
+        - premiumRooms
+        - economyRooms
+        - potentialGuests
+
+    OccupancyResponse:
+      type: object
+      properties:
+        usagePremium:
+          type: integer
+          example: 6
+        revenuePremium:
+          type: number
+          format: double
+          example: 1054.00
+        usageEconomy:
+          type: integer
+          example: 4
+        revenueEconomy:
+          type: number
+          format: double
+          example: 189.99
